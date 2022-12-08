@@ -1,5 +1,6 @@
 const Crypto = require("../models/cryptoModel");
 const axios = require("axios");
+const errorHandler = require("../errorHandling/errorHandler");
 exports.cryptoCoins = async (req, res) => {
   try {
     req.headers["authorisation"] = `Bearer ${process.env.API_KEY}`;
@@ -13,9 +14,8 @@ exports.cryptoCoins = async (req, res) => {
     );
     await Crypto.create(data);
 
-    console.log(req.headers);
     return res.status(200).send({ status: true, data });
   } catch (err) {
-    return res.status(500).send({ status: false, message: err.message });
+    return errorHandler(err, res);
   }
 };
